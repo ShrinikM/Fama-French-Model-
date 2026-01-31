@@ -32,11 +32,22 @@ Implements OLS regression via statsmodels to estimate stock exposures to:
 - CMA (Investment factor)
 
 **Expected Return Modeling**
-Calculates expected returns using factor loadings and historical factor premiums:
+Classical Factor Model: 
+Calculates expected returns using factor loadings and historical factor premiums
 
 ```
 ER_i = β_iM · RP_M + β_iSMB · RP_SMB + β_iHML · RP_HML + β_iRMW · RP_RMW + β_iCMA · RP_CMA
 ```
+Machine Learning Enhancements:
+Principal Component Analysis (PCA):
+- Reduces multicollinearity among factor returns
+- Extracts latent, orthogonal risk factors
+- Used as inputs to downstream models
+
+Random Forest Regression:
+- Predicts future stock returns using factors, rolling betas, momentum, and volatility
+- Automatically models non-linearities and feature interactions
+- Provides feature importance for interpretability
 
 **Portfolio Construction**
 - Ranks securities by expected return
@@ -54,9 +65,9 @@ Results are exported to `/results/`.
 
 ## Methodology
 
-The Fama-French 5-Factor model explains equity returns through systematic risk factors. Each stock's historical returns are regressed against these factors to estimate sensitivity coefficients (betas). These betas, combined with estimated factor premiums, generate forward-looking expected returns used for portfolio selection.
+The project is grounded in the Fama–French 5-Factor asset pricing framework, where equity returns are explained through systematic risk exposures. Traditional linear factor models provide a baseline for expected return estimation.
 
-The backtesting engine simulates historical performance to assess the strategy's risk-adjusted return profile under realistic market conditions.
+To improve predictive performance, PCA-derived latent factors and Random Forest regression are incorporated, allowing the model to capture non-linear dynamics and evolving relationships in financial data. All models are evaluated using out-of-sample backtests to ensure robustness and avoid look-ahead bias.
 
 ## Performance Metrics
 ```
