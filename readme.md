@@ -1,124 +1,80 @@
-# 📈 Multi-Factor Asset Pricing Model & Portfolio Backtester  
-### *A Complete Quantitative Research Pipeline Implemented in Python*
+# Multi-Factor Asset Pricing Model & Portfolio Backtester
 
-This project implements a **full end-to-end multi-factor investing model** based on the **Fama–French 5-Factor framework**, combined with a custom backtesting engine.  
-It automates the entire workflow used in real quantitative research environments:
+A quantitative research pipeline implementing the Fama-French 5-Factor framework with integrated backtesting capabilities.
 
-- Data ingestion (stock prices + Fama–French factors)  
-- Data cleaning & preprocessing  
-- Factor regression (OLS)  
-- Beta estimation and rolling exposures  
-- Expected return modeling  
-- Portfolio construction  
-- Backtesting & performance analytics  
+## Overview
 
-The pipeline is fully automated through `main.py`, making it production-ready and easy to extend.
+This project provides an end-to-end implementation of a multi-factor investing model used in quantitative research environments. The system automates the complete workflow from data ingestion through performance evaluation:
 
----
+- Data acquisition and preprocessing
+- Factor regression analysis
+- Beta estimation with rolling exposures
+- Expected return modeling
+- Portfolio construction
+- Performance backtesting and analytics
 
-## 🚀 Key Features
+The pipeline is fully automated via `main.py` and designed for production use and extension.
 
-### **✔ Automated Data Pipeline**
-- Downloads historical prices for 50+ equities using *yfinance*  
-- Loads and cleans Fama–French 5-factor data  
-- Converts returns to proper formats  
-- Merges factor data with stock returns seamlessly  
+## Core Capabilities
 
-### **✔ Factor Regression (OLS)**
-Uses `statsmodels` to compute each stock’s exposure to:
+**Data Pipeline**
+- Retrieves historical equity prices for 50+ stocks using yfinance
+- Processes Fama-French 5-factor data
+- Handles return conversions and data alignment
+- Merges factor and return datasets
 
-- **Market**
-- **SMB** (Size factor)
-- **HML** (Value factor)
-- **RMW** (Profitability)
-- **CMA** (Investment)
+**Factor Regression**
+Implements OLS regression via statsmodels to estimate stock exposures to:
+- Market risk premium
+- SMB (Size factor)
+- HML (Value factor)
+- RMW (Profitability factor)
+- CMA (Investment factor)
 
-Outputs clean beta estimates for each stock.
+**Expected Return Modeling**
+Calculates expected returns using factor loadings and historical factor premiums:
 
-### **✔ Expected Return Model**
-Expected return for each stock is computed as:
+```
+ER_i = β_iM · RP_M + β_iSMB · RP_SMB + β_iHML · RP_HML + β_iRMW · RP_RMW + β_iCMA · RP_CMA
+```
 
-\[
-ER_i = \beta_{iM} \cdot RP_M +
-       \beta_{iSMB} \cdot RP_{SMB} +
-       \beta_{iHML} \cdot RP_{HML} +
-       \beta_{iRMW} \cdot RP_{RMW} +
-       \beta_{iCMA} \cdot RP_{CMA}
-\]
+**Portfolio Construction**
+- Ranks securities by expected return
+- Constructs equal-weighted long-only portfolios (top 20 holdings)
+- Extensible to long/short, risk parity, and optimization-based strategies
 
-Factor premiums are estimated as historical averages.
+**Backtesting Framework**
+Evaluates strategy performance with standard metrics:
+- Annualized returns
+- Sharpe ratio
+- Maximum drawdown
+- Cumulative performance
 
-### **✔ Portfolio Construction**
-- Selects **top 20 stocks** by expected return  
-- Builds an **equal-weighted, long-only portfolio**  
-- Can be extended to long/short, risk parity, or optimizer-based portfolios  
+Results are exported to `/results/`.
 
-### **✔ Backtesting Engine**
-Evaluates portfolio performance using:
+## Methodology
 
-- Daily returns  
-- Cumulative performance  
-- Annualized return  
-- Sharpe ratio  
-- Maximum drawdown  
+The Fama-French 5-Factor model explains equity returns through systematic risk factors. Each stock's historical returns are regressed against these factors to estimate sensitivity coefficients (betas). These betas, combined with estimated factor premiums, generate forward-looking expected returns used for portfolio selection.
 
-Outputs results into `/results/`.
+The backtesting engine simulates historical performance to assess the strategy's risk-adjusted return profile under realistic market conditions.
 
----
-
-## 📊 Example Backtest Results
+## Performance Metrics
+```
 Annualized Return: 25.63%
 Sharpe Ratio: 1.08
-Max Drawdown: -36.5%
+Maximum Drawdown: -36.5%
+```
 
----
+### Prerequisites
+- Python 3.11
+- Required packages: yfinance, pandas, numpy, statsmodels, matplotlib
 
-## 🧠 Methodology Overview
+### Installation
+```bash
+pip install -r requirements.txt
+```
 
-### **1. Factor Model (Fama–French 5-Factor)**
-The model explains stock returns using five systematic drivers:
-
-- **Market Risk (β · Market premium)**  
-- **Size (Small minus Big)**  
-- **Value (High minus Low)**  
-- **Profitability (Robust minus Weak)**  
-- **Investment (Conservative minus Aggressive)**  
-
-Each stock's return is regressed on these factors using OLS.
-
-### **2. Beta Estimation**
-Betas represent sensitivities:
-
-- Example: *NVDA βₘ = 1.8*  
-  → If the market rises 1%, NVDA historically rises ~1.8%.
-
-### **3. Expected Returns**
-Stocks with high positive exposures to strong factor premiums receive higher expected returns.
-
-### **4. Portfolio Construction**
-The highest-expected-return stocks form a long-only portfolio.
-
-### **5. Backtesting**
-Simulates historical performance to evaluate the strategy’s risk/return profile.
-
----
-
-## 🧩 Technologies Used
-
-- **Python 3.11**  
-- **Pandas**, **NumPy**  
-- **statsmodels** (OLS regressions)  
-- **yfinance** (data ingestion)  
-- **Matplotlib** (for visualization in notebooks)  
-
----
-
-## 🚧 Future Improvements (Roadmap) (Chat-GPT)
-
-- Add **Streamlit dashboard** for interactive visualization  
-- Add **pytest unit tests** for model validation  
-- Add **rolling factor exposures** & time-varying betas  
-- Add **machine learning factor models** (Random Forest, XGBoost, Lasso)  
-- Integrate **risk model** (covariance shrinkage, Ledoit–Wolf)  
-- Add **optimizer** (mean-variance, Black–Litterman, risk parity)  
-
+### Usage
+```bash
+python main.py
+``` 
