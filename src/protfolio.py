@@ -12,7 +12,7 @@ def max_drawdown(cumulative):
     drawdown = (cumulative - rolling_max) / rolling_max
     return drawdown.min()
 
-def backtest(weights, stock_returns):
+def backtest_ols(weights, stock_returns):
     daily = portfolio_returns(weights, stock_returns)
     cumulative = (1 + daily).cumprod()
     sharpe = sharpe_ratio(daily)
